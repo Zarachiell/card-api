@@ -25,6 +25,7 @@ Foco em **segurança end-to-end** (AES-GCM + HMAC) e **subida simples** via Dock
 - springdoc-openapi (Swagger UI)
 - Lombok
 - Docker
+- MySQL
 
 ---
 
