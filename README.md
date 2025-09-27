@@ -86,16 +86,6 @@ curl --location 'http://localhost:8081/realms/cards/protocol/openid-connect/toke
 
 ---
 
-## Funcionalidades
-
-- POST /cards — cadastra (ou retorna) identificador e token de um cartão (idempotente).
-
-- POST /cards/upload — ingere um TXT no layout do desafio (header + linhas C* + trailer).
-
-- GET /cards/lookup — verifica se um PAN completo existe e retorna o identificador único do sistema (UUID).
-
----
-
 ## Testes
 
 - Unitários: CardIngestionService, CardSecureServiceImpl, CryptoServiceImpl.
