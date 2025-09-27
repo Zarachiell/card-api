@@ -1,1 +1,67 @@
 services:
+  app:
+    build: .
+    ports: ["8080:8080"]
+    depends_on:
+      - mysql
+      - keycloak
+    networks: [app-network]
+    environment:
+      # DB da aplicação
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/card_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      # Resource Server (JWT) — usar JWKS, sem validar issuer
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8081/realms/cards/protocol/openid-connect/certs
+      KC_AES_HEX_KEY: b77019e5a8514220640b66094ad29d67a3b5fe1e8411085893c8f8518a6c4f8e
+      KC_HMAC_HEX_KEY: 0a0eff3511577de2938579bede02ef75b4d92db3be15915ecf511092b1f77b53
+
+
+  mysql:
+    image: mysql:8.0
+    ports: ["3306:3306"]
+    environment:
+      MYSQL_DATABASE: card_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    networks: [app-network]
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  keycloak:
+    build:
+      context: ./keycloak
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: mysql
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_DB_URL: jdbc:mysql://mysql:3306/keycloak?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      KC_BOOTSTRAP_URL: http://localhost:8081
+      # Bootstrap params
+      REALM: cards
+      CLIENT_ID: cards-client
+      SCOPE_READ: card:read
+      SCOPE_WRITE: card:write
+      ACCESS_TOKEN_LIFESPAN: "300"
+    command: ["start-dev", "--http-port=8081"]
+    ports: ["8081:8081"]
+    networks: [app-network]
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

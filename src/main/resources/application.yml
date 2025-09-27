@@ -1,0 +1,48 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8081/realms/cards/protocol/openid-connect/certs
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org.zalando.logbook: INFO
+    org.springframework.web: INFO
+
+logbook:
+  strategy: without-body
+  obfuscate:
+    headers:
+      - Authorization
+      - Cookie
+      - Set-Cookie
+  exclude:
+    - /actuator/**
+    - /swagger-ui/**
+    - /v3/api-docs/**
+    - /error
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+
+cards:
+  crypto:
+    aes-key-hex: ${KC_AES_HEX_KEY}
+    hmac-key-hex: ${KC_HMAC_HEX_KEY}
+  validation:
+    require-luhn: false   # em prod, defina true
+

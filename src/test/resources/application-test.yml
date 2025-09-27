@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:cards;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # não tente conectar no Rabbit nos testes
+  rabbitmq:
+    listener:
+      simple:
+        auto-startup: false
+
+# desabilita segurança e openapi no contexto de teste
+springdoc:
+  api-docs.enabled: false
+  swagger-ui.enabled: false
+  spring:
+    autoconfigure:
+      exclude:
+        - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+        - org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration
+
+# chaves fixas para o CryptoService nos testes (64 hex cada)
+cards:
+  crypto:
+    aesKeyHex: 00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff
+    hmacKeyHex: a1a2a3a4a5a6a7a8a9aaabacadaeaf01b1b2b3b4b5b6b7b8b9babbbcbdbebf00
+
+# validação de Luhn desabilitada no teste (se quiser)
+cards.validation.require-luhn: false
