@@ -79,7 +79,6 @@ Obtenha um Access Token do Keycloak e use Bearer nas chamadas.
 ```
 curl --location 'http://localhost:8081/realms/cards/protocol/openid-connect/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
---header 'Cookie: JSESSIONID=9ADA1D452CF4A9934DD0BC0DA4B551C2' \
 --data-urlencode 'grant_type=client_credentials' \
 --data-urlencode 'client_id=cards-client' \
 --data-urlencode 'client_secret=<CLIENT_SECRET>'
