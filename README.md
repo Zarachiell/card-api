@@ -1,6 +1,6 @@
 # Card API — Desafio Hyperativa
 
-API sucinta para **tokenização e consulta de cartões** com ingestão por **TXT de layout fixo** e por **JSON**, protegida por **Keycloak**.  
+API para **tokenização e consulta de cartões** com ingestão por **TXT de layout fixo** e por **JSON**, protegida por **Keycloak**.  
 Foco em **segurança end-to-end** (AES-GCM + HMAC) e **subida simples** via Docker Compose.
 
 ---
